@@ -1,8 +1,8 @@
 package main
 
 import (
-	"echo_rest/db"
-	"echo_rest/routes"
+	"server_pc/db"
+	"server_pc/routes"
 )
 
 func main() {

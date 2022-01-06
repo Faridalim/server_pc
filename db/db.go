@@ -2,8 +2,8 @@ package db
 
 import (
 	"database/sql"
-	"echo_rest/config"
 	"fmt"
+	"server_pc/config"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -15,7 +15,7 @@ func Init() {
 	conf := config.GetConfig()
 
 	// username:password@protocol(address)/dbname?param=value
-	connectionString := conf.DB_USERNAME + ":" + conf.DB_PASSWORD + "@tcp(" + conf.DB_HOST + ":" + conf.DB_PORT + ")/" + conf.DB_NAME
+	connectionString := conf.DB_USERNAME + ":" + conf.DB_PASSWORD + "@tcp(" + conf.DB_HOST + ":" + conf.DB_PORT + ")/" + conf.DB_NAME + "?parseTime=true&loc=Asia%2FJakarta"
 	fmt.Println(connectionString)
 
 	db, err = sql.Open("mysql", connectionString)

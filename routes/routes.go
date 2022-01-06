@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"echo_rest/controllers"
+	"server_pc/controllers"
 
 	"github.com/labstack/echo/v4"
 )
@@ -9,15 +9,30 @@ import (
 func Init() *echo.Echo {
 
 	e := echo.New()
+	e.GET("/pc", controllers.FetchAllPc)
+	e.POST("/pc", controllers.InsertPc)
+	e.PUT("/pc", controllers.UpdatePc)
+	e.PUT("/pc/last_active", controllers.UpdateLastActive)
+	e.DELETE("/pc", controllers.DeletePc)
+	e.POST("/pc/restart_all", controllers.RestartAllPc)
+	e.POST("/pc/shutdown_all", controllers.ShutdownAllPc)
 
+	// config := middleware.JWTConfig{
+	// 	Claims:     &helpers.JwtCustomClaims{},
+	// 	SigningKey: []byte("secret"),
+	// }
+
+	//public
 	e.GET("/", hello)
-	e.GET("/pegawai", controllers.FetchAllPegawai)
-	e.POST("/pegawai", controllers.StorePegawai)
-	e.PUT("/pegawai", controllers.UpdatePegawai)
-	e.DELETE("/pegawai", controllers.DeletePegawai)
+
+	// r := e.Group("/restricted")
+
+	// r.Use(middleware.JWTWithConfig(config))
+	// r.GET("/pegawai", controllers.FetchAllPegawai)
+	// r.GET("/updateakses", controllers.UpdateAccess)
 
 	return e
-	// e.Logger.Fatal(e.Start("127.0.0.1:3000"))
+
 }
 
 func hello(c echo.Context) error {

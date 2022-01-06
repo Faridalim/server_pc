@@ -1,18 +1,30 @@
 package controllers
 
 import (
-	"echo_rest/models"
+	"fmt"
 	"net/http"
+	"server_pc/models"
+	"server_pc/security"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
 
 func FetchAllPegawai(c echo.Context) error {
+
+	permit := security.CheckAccess(security.GetCurrentFuncName(), c)
+	if !permit {
+		return c.JSON(http.StatusUnauthorized, map[string]string{
+			"message": "Akses ditolak",
+		})
+	}
+
 	result, err := models.FetchAllPegawai()
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"message": err.Error()})
 	}
+
+	fmt.Println(c.Request().Header.Get("roles"))
 
 	return c.JSON(200, result)
 }

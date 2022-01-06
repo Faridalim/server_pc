@@ -3,7 +3,7 @@
     "DB_PASSWORD" : "",
     "DB_PORT" : "3306",
     "DB_HOST" : "127.0.0.1",
-    "DB_NAME" : "echo_rest",
+    "DB_NAME" : "pc_management",
 
     "SMTP_HOST" : "",
     "SMTP_PORT" : "",

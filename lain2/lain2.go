@@ -2,14 +2,14 @@ package lain2
 
 import (
 	"bytes"
-	"echo_rest/config"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/smtp"
+	"server_pc/config"
 	"strings"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 func postExternal(c echo.Context) error {
