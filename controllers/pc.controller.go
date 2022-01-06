@@ -70,6 +70,7 @@ func DeletePc(c echo.Context) error {
 }
 
 func RestartAllPc(c echo.Context) error {
+
 	result, err := models.RestartAllPc()
 	checkError(err, c)
 	return c.JSON(200, result)
