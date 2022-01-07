@@ -3,12 +3,18 @@ package routes
 import (
 	"server_pc/controllers"
 
+	"github.com/labstack/echo/v4/middleware"
+
 	"github.com/labstack/echo/v4"
 )
 
 func Init() *echo.Echo {
 
 	e := echo.New()
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"http://127.0.0.1:5500"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}))
 	e.GET("/pc", controllers.FetchAllPc)
 	e.POST("/pc", controllers.InsertPc)
 	e.PUT("/pc", controllers.UpdatePc)

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <br><br>
+    <div class="bg-blue-500 px-6 py-8 shadow-lg">
+        <h1 class="text-3xl font-bold underline text-center text-white">
+            Power Manager
+        </h1>
+    </div>
+
+    <!-- Active PC -->
+    <div class="text-center pt-10 text-9xl text-blue-500 drop-shadow-lg">
+        100
+    </div>
+    <div class="text-center text-blue-500 text-3xl">Active PCs</div>
+    <br>
+    <!-- Active Command -->
+    <div class="pt-5 flex">
+        <div class="text-center shadow-lg w-3/6 border-4 ml-2 mr-1 border-blue-500 rounded-md">
+            <div class="text-blue-500 text-3xl">60</div>
+            <div class="text-blue-500 text-xl">to be turned off</div>
+        </div>
+
+        <div class="text-center shadow-lg w-3/6 border-4 ml-1 mr-2 border-indigo-500 rounded-md">
+            <div class="text-indigo-500 text-3xl">40</div>
+            <div class="text-indigo-500 text-xl">to be restarted</div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <!-- Shutdown All -->
+    <div class="justify-center">
+        <button onclick="tes.shutdown()" class="bg-blue-500 py-4 text-center text-white text-xl rounded-sm w-full shadow-md">
+            SHUTDOWN
+        </button>
+        <div class="py-1"></div>
+        <!-- Restart  -->
+        <button onclick="tes.restart()" class="bg-indigo-500 py-4 text-center text-white text-xl rounded-sm w-full shadow-md">
+            RESTART
+        </button>
+    </div>
+
+    <!-- JS Script -->
+    <script>
+        const tes = {
+            shutdown : function(){
+
+                Swal.fire({
+                            title: 'Anda yakin ingin mematikan seluruh PC?',
+                            showCancelButton: true,
+                            confirmButtonText: 'Ya',
+                            showLoaderOnConfirm: true,
+                            cancelButtonText: 'Tidak',
+                            preConfirm: (confirm) => {
+                                console.log(confirm)
+                                return fetch(`//api.github.com/users/${login}`)
+                                .then(response => {
+                                    if (!response.ok) {
+                                    throw new Error(response.statusText)
+                                    }
+                                    return response.json()
+                                })
+                                .catch(error => {
+                                    Swal.showValidationMessage(
+                                    `Request failed: ${error}`
+                                    )
+                                })
+                            },
+                            allowOutsideClick: () => !Swal.isLoading()
+                            }).then((result) => {
+                            if (result.isConfirmed) {
+                                Swal.fire({
+                                title: `${result.value.login}'s avatar`,
+                                })
+                            }
+                        })
+
+
+                // swal("Anda yakin ingin mematikan seluruh PC?", {
+                //     buttons: ["Tidak", "Ya"],
+
+                //     })
+                //     .then((value) => {
+                //         switch (value) {
+                //             case true:
+                //                 let form_data = new FormData();
+                //                 form_data.append('id', '1');
+
+                //                 fetch("http://127.0.0.1:3001/pc/last_active",
+                //                     {
+                //                         body : form_data,
+                //                         method : "post"
+                //                     }).then((result) => {
+                //                         if (result.status == 200) {
+                //                             result.json()
+                //                             swal("Sukses", "Perintah shutdown diterima server.");          
+                //                         } else {
+                //                             swal("Gagal", "Perintah shutdown gagal server.");
+                //                         }
+                                        
+                //                     })
+                //                 // kirim
+                //                 break
+                //             case null:
+                //                 break
+                //         }
+                //     })
+            },
+            restart : function(){
+                return
+            }
+
+        }
+    </script>
+</body>
+</html>
