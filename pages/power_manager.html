@@ -17,20 +17,20 @@
     </div>
 
     <!-- Active PC -->
-    <div class="text-center pt-10 text-9xl text-blue-500 drop-shadow-lg">
-        100
+    <div id='active_pc' class="text-center pt-10 text-9xl text-blue-500 drop-shadow-lg">
+        ...
     </div>
     <div class="text-center text-blue-500 text-3xl">Active PCs</div>
     <br>
     <!-- Active Command -->
     <div class="pt-5 flex">
         <div class="text-center shadow-lg w-3/6 border-4 ml-2 mr-1 border-blue-500 rounded-md">
-            <div class="text-blue-500 text-3xl">60</div>
+            <div id='shutdown_pc'  class="text-blue-500 text-3xl">...</div>
             <div class="text-blue-500 text-xl">to be turned off</div>
         </div>
 
         <div class="text-center shadow-lg w-3/6 border-4 ml-1 mr-2 border-indigo-500 rounded-md">
-            <div class="text-indigo-500 text-3xl">40</div>
+            <div id='restart_pc' class="text-indigo-500 text-3xl">...</div>
             <div class="text-indigo-500 text-xl">to be restarted</div>
         </div>
     </div>
@@ -50,19 +50,28 @@
 
     <!-- JS Script -->
     <script>
+
+        document.addEventListener("DOMContentLoaded", function(event){
+            tes.updateData(true)
+            tes.loopUpdate()
+        })
         
         const tes = {
-            shutdown : function(){
-
+            shutdown : () => {
                 Swal.fire({
-                            title: 'Anda yakin ingin mematikan seluruh PC?',
+                            title: 'Shutdown Command',
+                            text : 'Apakah Anda yakin akan mematikan seluruh PC?',
                             showCancelButton: true,
                             confirmButtonText: 'Ya',
                             showLoaderOnConfirm: true,
                             cancelButtonText: 'Tidak',
                             preConfirm: (confirm) => {
-                                console.log(confirm)
-                                return fetch(`//api.github.com/users/${login}`)
+                                let form_data = new FormData()
+                                // form_data.append('id', '1')
+                                return fetch(`http://localhost:3001/pc/shutdown_all`, {
+                                    // body  : form_data,
+                                    method : 'post'
+                                })
                                 .then(response => {
                                     if (!response.ok) {
                                     throw new Error(response.statusText)
@@ -73,50 +82,86 @@
                                     Swal.showValidationMessage(
                                     `Request failed: ${error}`
                                     )
-                                })
+                                })                     
                             },
                             allowOutsideClick: () => !Swal.isLoading()
                             }).then((result) => {
                             if (result.isConfirmed) {
+                                tes.updateData()
                                 Swal.fire({
-                                title: `${result.value.login}'s avatar`,
+                                title: `Sukses`,
+                                text : `Perintah diterima server`,
+                                timer : 2000
                                 })
                             }
                         })
-
-
-                // swal("Anda yakin ingin mematikan seluruh PC?", {
-                //     buttons: ["Tidak", "Ya"],
-
-                //     })
-                //     .then((value) => {
-                //         switch (value) {
-                //             case true:
-                //                 let form_data = new FormData();
-                //                 form_data.append('id', '1');
-
-                //                 fetch("http://127.0.0.1:3001/pc/last_active",
-                //                     {
-                //                         body : form_data,
-                //                         method : "post"
-                //                     }).then((result) => {
-                //                         if (result.status == 200) {
-                //                             result.json()
-                //                             swal("Sukses", "Perintah shutdown diterima server.");          
-                //                         } else {
-                //                             swal("Gagal", "Perintah shutdown gagal server.");
-                //                         }
-                                        
-                //                     })
-                //                 // kirim
-                //                 break
-                //             case null:
-                //                 break
-                //         }
-                //     })
             },
-            restart : function(){
-                return
+            restart : () => {
+                Swal.fire({
+                            title: 'Restart Command',
+                            text : 'Apakah Anda yakin akan me-restart seluruh PC?',
+                            showCancelButton: true,
+                            confirmButtonText: 'Ya',
+                            showLoaderOnConfirm: true,
+                            cancelButtonText: 'Tidak',
+                            preConfirm: (confirm) => {
+                                let form_data = new FormData()
+                                form_data.append('id', '1')
+                                return fetch(`http://localhost:3001/pc/restart_all`, {
+                                    body  : form_data,
+                                    method : 'post'
+                                })
+                                .then(response => {
+                                    if (!response.ok) {
+                                    throw new Error(response.statusText)
+                                    }
+                                    return response.json()
+                                })
+                                .catch(error => {
+                                    Swal.showValidationMessage(
+                                    `Request failed: ${error}`
+                                    )
+                                })                     
+                            },
+                            allowOutsideClick: () => !Swal.isLoading()
+                            }).then((result) => {
+                            if (result.isConfirmed) {
+                                tes.updateData()
+                                Swal.fire({
+                                title: `Sukses`,
+                                text : `Perintah diterima server`,
+                                timer : 2000
+                                })
+                            }
+                        })
+            },
+            updateData : () => {
+                let form_data = new FormData()
+                // form_data.append('')
+                return fetch(`http://localhost:3001/pc`, {
+                    // body : form_data,
+                    method : 'get'
+                }).then((response) => {
+                    return response.json()
+                }).then((response) => {    
+                    tes.updateDom(response.data)
+                })
+            },
+            updateDom : (response) => {
+                restart_pc = response.filter(tes.checkRestart)
+                shutdown_pc = response.filter(tes.checkShutdown)
+                document.getElementById('restart_pc').innerHTML = restart_pc.length
+                document.getElementById('shutdown_pc').innerHTML = shutdown_pc.length
+                document.getElementById('active_pc').innerHTML = response.length
+            },
+            checkRestart : (item) => {
+                return item.perintah == 'restart'
+            },
+            checkShutdown : (item) => {
+                return item.perintah == 'shutdown'
+            },
+            loopUpdate : () => {
+                setInterval(tes.updateData, 3000)
             }
 
         }
