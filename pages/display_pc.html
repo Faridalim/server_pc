@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="", initial-scale=1.0">
+    <title>Display PC LSP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body  class="mx-2 w-full">
+    <!-- Header -->
+    <div class="bg-blue-500 py-4 rounded">
+        <h1 class="text-center text-3xl text-white pb-2">Display PC LSP PPSDM Migas</h1>
+        <h4 class="text-center text-3xl text-white">Ruang A</h4>
+    </div>
+    <br>
+    <div class="text-center grid place-items-center text-white">
+        <div class="bg-indigo-500 p-2 w-fit rounded shadow-md px-4">
+            <h4 class="text-center text-3xl">Pilih PC yang masih Free (belum digunakan)</h4>
+        </div>
+    </div>
+    <!-- PC List -->
+    <br>
+    <div id="konten" class="grid grid-cols-10 grid-rows-7">
+
+    </div>
+
+    <!-- <div class="flex">
+        <div class="bg-blue-400 rounded m-2 p-1">
+            <div class="bg-indigo-500 rounded text-center text-white text-xl">A16</div>
+            <div class="bg-green-400 rounded text-center w-20">Free</div>
+        </div>
+        <div class="bg-blue-400 rounded m-2 p-1">
+            <div class="bg-indigo-500 rounded text-center text-white text-xl">A16</div>
+            <div class="bg-orange-500 rounded text-center w-20">In Use</div>
+        </div>
+        <div class="bg-gray-300 rounded m-2 p-1">
+            <div class="bg-gray-500 rounded text-center text-white text-xl">A17</div>
+            <div class="bg-gray-400 rounded text-center w-20">Off</div>
+        </div>
+    </div> -->
+
+    <Script>
+        document.addEventListener("DOMContentLoaded", (event) => {
+            
+        })
+
+        const state = {
+            pc_list : 10,
+            render_pc : () => {
+                pc_elem = ``
+                for (let i = 1; i <= 70; i++) {
+                    elem_free = `
+                    <div class="bg-blue-400 rounded m-2 p-1 h-24">
+                        <div class="bg-indigo-500 rounded text-white text-xl h-1/2 flex items-center justify-center">A`+ i +`</div>
+                        <div class="bg-green-400 rounded text-center h-1/2 flex items-center justify-center">Free</div>
+                    </div>
+                    `
+                    elem_inuse = `
+                    <div class="bg-blue-400 rounded m-2 p-1 h-24">
+                        <div class="bg-indigo-500 rounded text-center text-white text-xl h-1/2 flex items-center justify-center">A`+ i +`</div>
+                        <div class="bg-orange-500 rounded text-center h-1/2 flex items-center justify-center text-white">In Use</div>
+                    </div>
+                    `
+                    elem_off = `
+                    <div class="bg-gray-300 rounded m-2 p-1 h-24">
+                        <div class="bg-gray-500 rounded text-center text-white text-xl h-1/2 flex items-center justify-center">A`+ i +`</div>
+                        <div class="bg-gray-400 rounded text-center h-1/2 flex items-center justify-center">Off</div>
+                    </div>
+                    `
+                    if (i%2) {
+                        pc_elem = pc_elem + elem_free
+                    } else if (i%4) {
+                        pc_elem = pc_elem + elem_inuse
+                    } else {
+                        pc_elem = pc_elem + elem_off
+                    }
+                }
+                document.getElementById('konten').innerHTML = pc_elem
+                
+            }
+        }
+
+        state.render_pc()
+    </Script>
+
+
+</body>
+</html>

@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 	"server_pc/models"
 	"strconv"
@@ -52,7 +51,7 @@ func UpdatePc(c echo.Context) error {
 
 func UpdateLastActive(c echo.Context) error {
 	id := c.FormValue("id")
-	fmt.Println(id)
+	// fmt.Println(id)
 	id_int, err := strconv.Atoi(id)
 	checkError(err, c)
 
