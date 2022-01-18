@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="", initial-scale=1.0">
+    <title>Display PC LSP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body  class="w-full">
+    <!-- Header -->
+    <div class="bg-blue-500 py-4 rounded">
+        <h1 class="text-center text-3xl text-white pb-2">Display PC LSP PPSDM Migas - Ruang A</h1>
+        <!-- <h4 class="text-center text-3xl text-white"></h4> -->
+    </div>
+    <br>
+    <div class="text-center grid place-items-center text-white">
+        <div class="bg-indigo-500 p-2 w-fit rounded shadow-md px-4">
+            <h4 class="text-center text-3xl">Pilih PC yang masih Free (belum digunakan)</h4>
+        </div>
+    </div>
+    <!-- PC List -->
+    <br>
+    <div id="konten" class="grid grid-cols-10 grid-rows-7">
+
+    </div>
+
+    <!-- <div class="flex">
+        <div class="bg-blue-400 rounded m-2 p-1">
+            <div class="bg-indigo-500 rounded text-center text-white text-xl">A16</div>
+            <div class="bg-green-400 rounded text-center w-20">Free</div>
+        </div>
+        <div class="bg-blue-400 rounded m-2 p-1">
+            <div class="bg-indigo-500 rounded text-center text-white text-xl">A16</div>
+            <div class="bg-orange-500 rounded text-center w-20">In Use</div>
+        </div>
+        <div class="bg-gray-300 rounded m-2 p-1">
+            <div class="bg-gray-500 rounded text-center text-white text-xl">A17</div>
+            <div class="bg-gray-400 rounded text-center w-20">Off</div>
+        </div>
+    </div> -->
+
+    <Script>
+        document.addEventListener("DOMContentLoaded", (event) => {
+            state.fetch_pc()
+            state.loop_update()
+        })
+
+        const state = {
+            pc_list : 10,
+            elemen : {
+                free : (i, j) => {
+                    return `
+                    <div class="bg-green-200 rounded m-2 p-1 h-24" onclick="state.choose_pc(`+j+`)">
+                        <div class="bg-green-600 rounded text-white text-xl h-1/2 flex items-center justify-center">`+ i +`</div>
+                        <div class="bg-green-600 rounded text-white text-center h-1/2 flex items-center justify-center font-semibold">Free</div>
+                    </div>
+                    `
+                },
+                inuse : (i, j) => {
+                    return `
+                    <div class="bg-orange-200 rounded m-2 p-1 h-24" onclick="state.choose_pc(`+j+`)">
+                        <div class="bg-orange-500 rounded text-center text-xl h-1/2 flex items-center justify-center">`+ i +`</div>
+                        <div class="bg-orange-500 rounded text-center h-1/2 flex items-center justify-center font-semibold">In Use</div>
+                    </div>
+                    `
+                },
+                off : (i, j) => {
+                    return `
+                    <div class="bg-gray-300 rounded m-2 p-1 h-24" onclick="state.choose_pc(`+j+`)">
+                        <div class="bg-gray-400 rounded text-center text-xl h-1/2 flex items-center justify-center">`+ i +`</div>
+                        <div class="bg-gray-400 rounded text-center h-1/2 flex items-center justify-center font-semibold">Off</div>
+                    </div>`
+                }
+            },
+            fetch_pc : () => {
+                return fetch('http://localhost:3001/pc').then((response) => {
+                    return response.json()
+                }).then((response) => {
+                    state.pc_list = response.data
+                }).then((response)=> {
+                    state.render_pc()
+                })
+            },
+            render_pc : () => {
+                let pc_elem = ``
+                for (let i of state.pc_list){
+                   
+                    if ((new Date(i.last_active).getTime() + 15000) < Date.now() ){
+                        pc_elem = pc_elem + state.elemen.off(i.nama, i.id)
+                    } else if (i.in_use == '0'){
+                        pc_elem = pc_elem + state.elemen.free(i.nama, i.id)
+                    } else if (i.in_use == '1'){
+                        pc_elem = pc_elem + state.elemen.inuse(i.nama, i.id)
+                    }
+                }
+                document.getElementById('konten').innerHTML = pc_elem
+            },
+            loop_update : () => {
+                setInterval(state.fetch_pc, 5000)
+            },
+            choose_pc : (id) => {
+                let form_data = new FormData()
+                form_data.append('id', id)
+                form_data.append('in_use', 'true')
+                fetch('http://localhost:3001/pc/last_active', {
+                    body : form_data,
+                    method : 'post'
+                }).then((response)=> {
+                    if (response.ok) {
+                        state.fetch_pc()
+                    }
+                })
+            }
+
+        }
+
+        // state.render_pc()
+
+    </Script>
+
+
+</body>
+</html>

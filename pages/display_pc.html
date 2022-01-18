@@ -10,8 +10,8 @@
 <body  class="mx-2 w-full">
     <!-- Header -->
     <div class="bg-blue-500 py-4 rounded">
-        <h1 class="text-center text-3xl text-white pb-2">Display PC LSP PPSDM Migas</h1>
-        <h4 class="text-center text-3xl text-white">Ruang A</h4>
+        <h1 class="text-center text-3xl text-white pb-2">Display PC LSP PPSDM Migas - Ruang A</h1>
+        <!-- <h4 class="text-center text-3xl text-white"></h4> -->
     </div>
     <br>
     <div class="text-center grid place-items-center text-white">
@@ -53,19 +53,19 @@
                     elem_free = `
                     <div class="bg-blue-400 rounded m-2 p-1 h-24">
                         <div class="bg-indigo-500 rounded text-white text-xl h-1/2 flex items-center justify-center">A`+ i +`</div>
-                        <div class="bg-green-400 rounded text-center h-1/2 flex items-center justify-center">Free</div>
+                        <div class="bg-green-400 rounded text-center h-1/2 flex items-center justify-center font-semibold">Free</div>
                     </div>
                     `
                     elem_inuse = `
                     <div class="bg-blue-400 rounded m-2 p-1 h-24">
                         <div class="bg-indigo-500 rounded text-center text-white text-xl h-1/2 flex items-center justify-center">A`+ i +`</div>
-                        <div class="bg-orange-500 rounded text-center h-1/2 flex items-center justify-center text-white">In Use</div>
+                        <div class="bg-orange-500 rounded text-center h-1/2 flex items-center justify-center text-white font-semibold">In Use</div>
                     </div>
                     `
                     elem_off = `
                     <div class="bg-gray-300 rounded m-2 p-1 h-24">
                         <div class="bg-gray-500 rounded text-center text-white text-xl h-1/2 flex items-center justify-center">A`+ i +`</div>
-                        <div class="bg-gray-400 rounded text-center h-1/2 flex items-center justify-center">Off</div>
+                        <div class="bg-gray-400 rounded text-center h-1/2 flex items-center justify-center font-semibold">Off</div>
                     </div>
                     `
                     if (i%2) {

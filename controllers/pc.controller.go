@@ -51,11 +51,18 @@ func UpdatePc(c echo.Context) error {
 
 func UpdateLastActive(c echo.Context) error {
 	id := c.FormValue("id")
-	// fmt.Println(id)
+	in_use := c.FormValue("in_use")
+	var in_use_int = 0
+	if in_use == "true" {
+		in_use_int = 1
+	} else if in_use == "false" {
+		in_use_int = 0
+	}
+	// fmt.Println(in_use_int)
 	id_int, err := strconv.Atoi(id)
 	checkError(err, c)
 
-	result, err := models.UpdateLastActive(id_int)
+	result, err := models.UpdateLastActive(id_int, in_use_int)
 	checkError(err, c)
 	return c.JSON(200, result)
 }

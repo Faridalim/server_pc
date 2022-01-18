@@ -11,6 +11,7 @@ type Pc struct {
 	LastActive time.Time `json:"last_active"`
 	Perintah   string    `json:"perintah"`
 	Lokasi     string    `json:"lokasi"`
+	InUse      string    `json:"in_use"`
 }
 
 func FetchAllPc() (Response, error) {
@@ -28,7 +29,7 @@ func FetchAllPc() (Response, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		err := rows.Scan(&obj.Id, &obj.Nama, &obj.LastActive, &obj.Perintah, &obj.Lokasi)
+		err := rows.Scan(&obj.Id, &obj.Nama, &obj.LastActive, &obj.Perintah, &obj.InUse, &obj.Lokasi)
 		if err != nil {
 			return res, err
 		}
@@ -108,7 +109,7 @@ func UpdatePc(id int, nama string, lokasi string) (Response, error) {
 	return res, nil
 }
 
-func UpdateLastActive(id int) (Response, error) {
+func UpdateLastActive(id int, in_use_int int) (Response, error) {
 
 	var res Response
 	var perintah string
@@ -132,13 +133,13 @@ func UpdateLastActive(id int) (Response, error) {
 	}
 
 	// update pc
-	sqlStatement = "UPDATE pc SET last_active = ?, perintah = '' WHERE id = ?"
+	sqlStatement = "UPDATE pc SET last_active = ?, in_use = ?, perintah = '' WHERE id = ?"
 	stmt, err = con.Prepare(sqlStatement)
 	if err != nil {
 		return res, err
 	}
 
-	_, err = stmt.Exec(last_update, id)
+	_, err = stmt.Exec(last_update, in_use_int, id)
 	if err != nil {
 		return res, nil
 	}
@@ -149,6 +150,7 @@ func UpdateLastActive(id int) (Response, error) {
 		"id":          id,
 		"last_active": last_update,
 		"perintah":    perintah,
+		"in_use":      in_use_int,
 	}
 
 	return res, nil
